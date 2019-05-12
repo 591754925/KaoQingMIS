@@ -76,7 +76,8 @@
 
                 <!-- Excel文件管理 -->
                 <n-right-excel v-if="now_page == 'excel'" :excel="excel"
-                v-on:file_write="file_write"></n-right-excel>
+                v-on:file_write="file_write" v-on:file_dowlond="file_dowlond" v-on:file_excel="file_excel"
+                v-on:file_remove="file_remove" ></n-right-excel>
 
                 <!-- 操作须知 -->
 

@@ -755,11 +755,11 @@ Vue.component('n-right-excel', {
             <form action="api/v2/file/fileUpload" method="post" enctype="multipart/form-data">
                 <div style="margin: 10px 0px; float: right;">
                     <div style="display: inline;">
-                        <span style="color:blue; font-size:15px;">注意：该选项会将数据保存为名为Students的文件! &nbsp;</span><a href="javascript:;" v-on:click="$emit('file_write')"  style="color: red;padding:0px;font-size:16px;" title="点击导出数据">[导出数据]</a>
+                        <span style="color:blue; font-size:15px;">注意：该选项会将数据保存为名为Students的文件! &nbsp;</span><a href="javascript:;" v-on:click="$emit('file_excel')"  style="color: red;padding:0px;font-size:16px;" title="点击导出数据">[导出数据]</a>
                     </div>
                     <div style="width:400px; display: inline; float: right; ">
                         <input type="file" name="file" style="width: 45%; margin-left: 150px;" /> 
-                        <input type="submit"  value="上传文件" />
+                        <input type="submit" value="上传文件" />
                     </div>
                 </div>
             </form>
@@ -779,13 +779,13 @@ Vue.component('n-right-excel', {
                             <td>Excel文件</td>
                             
                             <td>
-                                <a href="#" target="_blank" title="点击下载"> 
+                                <a :href="'/api/v2/file/dowlond?name='+item"  target="_blank" title="点击下载"> 
                                     <img src="images/down.png" alt="点击下载" />
                                 </a> &nbsp;&nbsp;&nbsp;&nbsp; 
-                                <a href="javascript:if(confirm('确认删除?'))location=''" title="点击删除">
+                                <a href="javascript:;" v-on:click="$emit('file_remove', item)"  title="点击删除">
                                     <img src="images/delete.png" alt="点击删除" />
                                 </a>&nbsp;&nbsp;&nbsp;&nbsp; 
-                                <a href="javascript:if(confirm('确认导入数据?'))location=''" style="color: blue;" title="点击导入">[导入数据]</a>
+                                <a href="javascript:;" v-on:click="$emit('file_write', item)" style="color: blue;" title="点击导入">[导入数据]</a>
                             </td>
                         </tr>
 
@@ -1394,23 +1394,12 @@ new Vue({
         },
         //-----------------------------文件操作----------------------------------//
         //文件写入
-        file_write: function() {
-            axios.get('/api/v2/file/write')
+        file_write: function(name) {
+            axios.post('/api/v2/file/write', name)
                 .then(
                     (res) => {
                         if (res.data) {
                             toastr.success('写入成功');
-                            axios.get('/api/v2/file/list')
-                                .then(
-                                    (res) => {
-                                        console.log(res.data);
-                                        this.excel = res.data;
-                                        
-                                    }
-                                )
-                                .catch(
-                                    (error) => { console.log(error); }
-                                );
                         } else
                             toastr.warning('写入失败');
                     }
@@ -1420,22 +1409,40 @@ new Vue({
                 );
         },
 
-        file_dowlond: function(name) {
-            axios.post('/api/v2/data/file', name)
+        //excel表格生成
+        file_excel: function() {
+            axios.get('/api/v2/file/excel')
                 .then(
                     (res) => {
                         if (res.data) {
-                            toastr.success('下载成功');
-                            axios.get('/api/v2/data/scorelist')
+                            toastr.success('excel生成成功');
+                            axios.get('/api/v2/file/list')
                                 .then(
                                     (res) => {
                                         console.log(res.data);
-                                        
+                                        this.excel = res.data; 
                                     }
                                 )
                                 .catch(
                                     (error) => { console.log(error); }
                                 );
+                        } else
+                            toastr.warning('失败');
+                    }
+                )
+                .catch(
+                    (error) => { console.log(error); }
+                );
+        },
+
+        //文件下载
+        file_dowlond: function(name) {
+            console.log(name);
+            axios.post('/api/v2/file/dowlond', name)
+                .then(
+                    (res) => {
+                        if (res.data) {
+                            
                         } else
                             toastr.warning('下载失败');
                     }
@@ -1445,6 +1452,31 @@ new Vue({
                 );
         },
 
+        //文件删除
+        file_remove: function(name) {
+            axios.post('/api/v2/file/remove', name)
+                .then(
+                    (res) => {
+                        if (res.data) {
+                            toastr.success('删除成功');
+                            axios.get('/api/v2/file/list')
+                                .then(
+                                    (res) => {
+                                        console.log(res.data);
+                                        this.excel = res.data; 
+                                    }
+                                )
+                                .catch(
+                                    (error) => { console.log(error); }
+                                );
+                        } else
+                            toastr.warning('删除失败');
+                    }
+                )
+                .catch(
+                    (error) => { console.log(error); }
+                );
+        },
     },
     //挂载
     mounted() {

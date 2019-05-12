@@ -16,14 +16,23 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.csmz.kaoqing.web.Dept;
 import com.csmz.kaoqing.web.Student;
+import com.csmz.kaoqing.web.mapper.StudentMapper;
 import com.csmz.kaoqing.web.service.ImportParse;
-
+/**
+ * excel数据写入
+ * @author Charlene
+ *
+ */
 @Service
 public class ImportParseImpl implements ImportParse {
+	
+	@Autowired
+	StudentMapper studentmapper;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -39,7 +48,7 @@ public class ImportParseImpl implements ImportParse {
 				// 一个workbook可以有多个sheet组成
 				XSSFSheet sheet = wb.getSheetAt(i);
 				if (sheet != null) {
-					for (int j = 0; j <= sheet.getLastRowNum(); j++) {
+					for (int j = 1; j <= sheet.getLastRowNum(); j++) {
 						// 一个sheet是由多个row组成
 						XSSFRow row = sheet.getRow(j);
 						if (row != null) {
@@ -50,7 +59,6 @@ public class ImportParseImpl implements ImportParse {
 								if (cell != null) {
 									// 虽然excel中设置的都是文本，但是数字文本还被读错，如“1”取成“1.0”，加上 cell.CELL_TYPE_STRING，临时把它当做文本来读取。
 									cell.setCellType(Cell.CELL_TYPE_STRING);
-									
 									switch (k) {
 									case 0:
 										st.setS_no(getValue(cell));
@@ -94,11 +102,17 @@ public class ImportParseImpl implements ImportParse {
 										double f = Double.parseDouble(getValue(cell));
 										st.setOutTimes((int) f);
 										break;
+									case 11:
+										double g = Double.parseDouble(getValue(cell));
+										st.setLeaveTimes((int) g);
+										break;
 									}
 								}
 							}
 							if(st.getS_no()!=null) {
-								System.out.println(st.toString());
+								
+								studentmapper.updateStudent(st);
+								System.out.println(st.toString()+" -------> 写入成功");
 							}
 						}
 					}
@@ -152,7 +166,9 @@ public class ImportParseImpl implements ImportParse {
 							for (int k = 0; k <= row.getLastCellNum(); k++) {
 								//一个row是由多个cell（HSSFCell）组成
 								HSSFCell cell = row.getCell(k);
+								
 								if (cell != null) {
+									
 									//虽然excel中设置的都是文本，但是数字文本还被读错，如“1”取成“1.0”，加上 cell.CELL_TYPE_STRING，临时把它当做文本来读取。								
 									cell.setCellType(cell.CELL_TYPE_STRING);
 									

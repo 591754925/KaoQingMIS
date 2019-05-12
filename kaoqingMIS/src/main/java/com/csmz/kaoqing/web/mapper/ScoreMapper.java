@@ -26,7 +26,7 @@ public interface ScoreMapper {
 	 * 获取审核记录列表
 	 * @return
 	 */
-	@Select("select * from scoreupdate")
+	@Select("select * from scoreupdate order by id desc")
 	@Results({
 		@Result(column = "s_no", 
 				property = "student",
