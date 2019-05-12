@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>会议管理</title>
+
+	<link rel="stylesheet" href="css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="css/swiper.min.css" />
+	<link rel="stylesheet" href="css/weui.min.css" />
+	<link rel="stylesheet" href="css/indexcss.css" />
+
+	<!-- JS库 ajax 异步通信-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- jQuery库 -->
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	<!-- vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- 弹出框插件 toastr.css -->
+	<link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="containar">
+			<!-- 提示部分 -->
+			<div class="about_contain" style="margin-bottom: 10px;">
+				<ul>
+					<li>
+						<div class="weui-form-preview">
+							<div class="weui-form-preview__bd">
+								<div class="weui-form-preview__item">
+									<label class="weui-form-preview__label weui-media__title">温馨提示</label>
+									<p class="weui-form-preview__value a_title">1.仅供长沙民政职业技术学院内部使用</p>
+									<p class="weui-form-preview__value a_title">2.版权所有，盗版必究</p>
+									<p class="weui-form-preview__value a_title">3.正在开发当中，请耐心等待后续功能的完善</p>
+									<p class="weui-form-preview__value a_title">4.审核制度：</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- 会议home -->
+			<div v-if="meeting_page=='home'" style="padding:10px;">
+				<div class="weui-panel weui-panel_access ">
+					<div class="weui-panel__ft">
+						<a href="i_meeting_add.html"
+							class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd h-tittle">
+								<h4 class="weui-media__title">添加会议</h4>
+							</div> <span class="weui-cell__ft"></span>
+						</a>
+					</div>
+				</div>
+				<div class="weui-panel weui-panel_access ">
+					<div class="weui-panel__ft">
+						<a href="javascript:;" @click="page_change('sel')"
+							class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd h-tittle">
+								<h4 class="weui-media__title">管理会议</h4>
+							</div> <span class="weui-cell__ft"></span>
+
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- 会议目录sel -->
+			<div v-if="meeting_page == 'sel'">
+				<div class="weui-panel weui-panel_access ">
+					<div class="page__bd page__bd_spacing" style="padding: 10px;">
+						<input type="button" @click="page_change('home')" class="weui-btn weui-btn_plain-default"
+							value="返回" />
+					</div>
+					<div v-for="(m, i) in meetingList" class="weui-panel__ft">
+						<a href="javascript:;" class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd h-tittle">
+								<h3 class="weui-media__title">编号: {{m.no}}</h3>
+								<h3 class="weui-media__title">会议: {{m.name}}</h3>
+								<h3 class="weui-media__title">会议时间: {{m.time}}</h3>
+								<h3 class="weui-media__title">会议地点: {{m.address}}</h3>
+								<br />
+							</div><span class="weui-cell__ft"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			
+
+
+			<div class="weui-panel__ft" style="margin-top: 50px;"></div>
+		</div>
+
+		<!--底部导航-->
+		<n-nav-footer :page="now_page[0]"></n-nav-footer>
+
+	</div>
+
+
+
+
+	<!-- 加载vue实例和组件 -->
+	<script type="text/javascript" src="js/i_vues.js"></script>
+
+	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+
+
+	<script>
+		new Vue({
+			el: '#app',
+			//数据
+			data: {
+				now_page: [
+					'home',
+					'students',
+					'kaoqing'
+				],
+				meeting_page: 'home',
+
+				meetingList: [],
+			},
+			//方法
+			methods: {
+				//页面改变
+				page_change: function (meeting_page) {
+					this.meeting_page = meeting_page;
+				},
+
+			},
+
+			//挂载
+			mounted() {
+				axios.get('/api/v2/data/meetinglist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.meetingList = res.data;
+							
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+			},
+
+			computed: {
+
+			},
+		});
+	</script>
+
+	<script>
+		var swiper = new Swiper('.swiper-container', {
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		});
+	</script>
+
+</body>
+
+</html>

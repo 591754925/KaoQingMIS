@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>会议管理</title>
+
+	<link rel="stylesheet" href="css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="css/swiper.min.css" />
+	<link rel="stylesheet" href="css/weui.min.css" />
+	<link rel="stylesheet" href="css/indexcss.css" />
+
+	<!-- JS库 ajax 异步通信-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- jQuery库 -->
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	<!-- vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- 弹出框插件 toastr.css -->
+	<link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="containar">
+			<!-- 提示部分 -->
+			<div class="about_contain" style="margin-bottom: 10px;">
+				<ul>
+					<li>
+						<div class="weui-form-preview">
+							<div class="weui-form-preview__bd">
+								<div class="weui-form-preview__item">
+									<label class="weui-form-preview__label weui-media__title">温馨提示</label>
+									<p class="weui-form-preview__value a_title">1.仅供长沙民政职业技术学院内部使用</p>
+									<p class="weui-form-preview__value a_title">2.版权所有，盗版必究</p>
+									<p class="weui-form-preview__value a_title">3.正在开发当中，请耐心等待后续功能的完善</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- 会议home -->
+			<div v-show="kaoqing_page=='home'">
+				<div style="height: auto; margin: 3px 0px 12px 0px; padding-left: 15px;">
+					<p>选择会议</p>
+				</div>
+				<div class="weui-panel weui-panel_access ">
+					<div v-for="(m, i) in meetingList" class="weui-panel__ft">
+						<a href="javascript:;" @click="page_change(i)"
+							class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd h-tittle">
+								<h3 class="weui-media__title">编号: {{m.no}}</h3>
+								<h3 class="weui-media__title">会议: {{m.name}}</h3>
+								<h3 class="weui-media__title">会议时间: {{m.time}}</h3>
+								<h3 class="weui-media__title">会议地点: {{m.address}}</h3>
+								<br />
+							</div><span class="weui-cell__ft"></span>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- 会议目录sel -->
+			<div v-show="kaoqing_page == 'sel'">
+				<div class="weui-panel weui-panel_access ">
+					<a href="javascript:;" style="margin: 5px;" @click="gohome()"
+						class="weui-btn weui-btn_plain-default"> 返回 </a>
+					<a href="javascript:void(0);" style="background: #007bff; margin: 5px;"
+						class="weui-btn btn_min weui-btn_primary">{{now_meeting.name}} | {{now_meeting.time}}</a>
+
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<div class="weui-grids swiper-slide" v-for="index in dept_pages"
+								style="background: #FFFFFF;">
+								<a href="javascript:;" @click="dept_go(dept.d_name)" v-for="(dept, i) in deptList"
+									v-if="i<index*4 && i>=(index-1)*4" class="weui-grid">
+									<div class="weui-grid__icon">
+										<img src="images/user.jpg" alt="">
+									</div>
+									<p class="weui-grid__label">{{dept.d_name}}</p>
+								</a>
+							</div>
+						</div>
+					</div>
+
+
+					<li v-for="(stu, i) in now_meeting.students" v-if="stu.student.dept.d_name == kaoqing_dept"
+						style="border-bottom: 1px solid #DFDFDF;">
+						<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+							<div class="weui-media__hd">
+								<img class="weui-media__thumb" src="images/ch1.jpg" alt="头像">
+							</div>
+							<div class="weui-media__bd">
+								<h4 class="weui-media__title">姓名：{{stu.student.s_name}} </h4>
+								<p class="weui-media__desc">学号：{{stu.student.s_no}} </p>
+								<p class="weui-media__desc">部门：{{stu.student.dept.d_name}}</p>
+								<p class="weui-media__desc">职位：{{stu.student.greed_name}} </p>
+
+							</div>
+						</a>
+						<div class="weui-form-preview__ft">
+							<a v-if="stu.tagle == '缺席'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:white; background: #dc3545;" href="javascript:;">缺席</a>
+							<a v-if="stu.tagle != '缺席'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:red;" href="javascript:;" @click="updatetime(now_meeting.no, stu.student.s_no, 'outTimes', '缺席', i)">缺席</a>
+
+							<a v-if="stu.tagle == '迟到'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:white; background: #F39C12;" href="javascript:;">迟到</a>
+							<a v-if="stu.tagle != '迟到'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:#F39C12;" href="javascript:;" @click="updatetime(now_meeting.no, stu.student.s_no, 'lateTimes', '迟到', i)">迟到</a>
+
+							<a v-if="stu.tagle == '请假'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:white; background: #6c757d;" href="javascript:;">请假</a>
+							<a v-if="stu.tagle != '请假'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:#6c757d;" href="javascript:;" @click="updatetime(now_meeting.no, stu.student.s_no, 'leaveTimes', '请假', i)">请假</a>
+
+							<a v-if="stu.tagle == '已签到'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:white; background: #28a745;" href="javascript:;">签到</a>
+							<a v-if="stu.tagle != '已签到'" class="weui-form-preview__btn weui-form-preview__btn_primary"
+								style="color:#28a745;" href="javascript:;" @click="updatetime(now_meeting.no, stu.student.s_no, 'onTimes', '已签到', i)">签到</a>
+
+
+						</div>
+					</li>
+				</div>
+			</div>
+
+
+			<div class="weui-panel__ft" style="margin-top: 50px;"></div>
+		</div>
+
+		<!--底部导航-->
+		<n-nav-footer :page="now_page[2]"></n-nav-footer>
+
+	</div>
+
+
+
+
+	<!-- 加载vue实例和组件 -->
+	<script type="text/javascript" src="js/i_vues.js"></script>
+
+	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+	<script type="text/javascript" src="js/toastr.min.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			//数据
+			data: {
+				now_page: [
+					'home',
+					'students',
+					'kaoqing'
+				],
+				kaoqing_page: 'home',
+				kaoqing_dept: '',
+				now_meeting: {},
+				students: [],
+				meetingList: [],
+				deptList: [],
+			},
+			//方法
+			methods: {
+				//页面改变
+				page_change: function (index) {
+					this.kaoqing_page = 'sel';
+					this.now_meeting = this.meetingList[index];
+				},
+
+				//换部门
+				dept_go: function (name) {
+					this.kaoqing_dept = name;
+				},
+				gohome: function () {
+					this.kaoqing_page = 'home';
+				},
+
+				//修改考勤状态
+				updatetime: function (m_no, s_no, name, tagle, index) {
+					let s = new URLSearchParams();
+
+					s.append('m_no', m_no);
+					s.append('s_no', s_no);
+					s.append('name', name);
+					s.append('tagle', tagle);
+					axios.post('/api/v2/student/updateScore', s)
+						.then(
+							(res) => {
+								if (res.data) {
+									this.now_meeting.students[index].tagle = tagle;
+									toastr.success('修改成功');
+								} else {
+									toastr.warning('修改失败');
+								}
+							}
+						)
+						.catch(
+							(error) => { console.log(error); }
+						);
+					
+					
+				},
+
+			},
+
+			//挂载
+			mounted() {
+
+				axios.get('/api/v2/data/meetinglist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.meetingList = res.data;
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+				axios.get('/api/v2/data/deptlist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.deptList = res.data;
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+				
+			},
+
+			computed: {
+				dept_pages: function () {
+					return Math.ceil(this.deptList.length / 4);
+				},
+			},
+		});
+	</script>
+
+
+
+	<script>
+		//提示插件显示位置 - 中上
+		toastr.options.positionClass = 'toast-top-center';
+		var swiper = new Swiper('.swiper-container', {
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		});
+	</script>
+
+</body>
+
+</html>

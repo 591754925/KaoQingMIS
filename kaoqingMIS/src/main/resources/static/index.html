@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>学生考勤系统</title>
+
+	<link rel="stylesheet" href="css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="css/swiper.min.css" />
+	<link rel="stylesheet" href="css/weui.min.css" />
+	<link rel="stylesheet" href="css/indexcss.css" />
+
+	<!-- JS库 ajax 异步通信-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- jQuery库 -->
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	<!-- vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- 弹出框插件 toastr.css -->
+	<link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+		<!-- 首页 -->
+		<div class="containar">
+			<!--幻灯片-->
+			<div class="swiper-container">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<img src="images/slide-1.png" width="100%">
+					</div>
+					<div class="swiper-slide">
+						<img src="images/slide-2.png" width="100%">
+					</div>
+					<div class="swiper-slide">
+						<img src="images/slide-3.png" width="100%">
+					</div>
+				</div>
+				<!-- 添加圆点导航 -->
+				<div class="swiper-pagination"></div>
+			</div>
+			
+			<!--中间分类导航-->
+			<div class="weui-grids" style="background: #FFFFFF;">
+					<a href="i_meeting.html" class="weui-grid js_grid">
+						<div class="weui-grid__icon">
+							<img src="images/icon_nav_sz.png" alt="">
+						</div>
+						<p class="weui-grid__label">会议管理</p>
+					</a> <a href="i_kaoqing.html" class="weui-grid js_grid">
+						<div class="weui-grid__icon">
+							<img src="images/icon_nav_kc.png" alt="">
+						</div>
+						<p class="weui-grid__label">学生考勤</p>
+					</a> <a href="i_dept.html" class="weui-grid js_grid">
+						<div class="weui-grid__icon">
+							<img src="images/user.jpg" alt="">
+						</div>
+						<p class="weui-grid__label">成员管理</p>
+					</a> <a href="i_score.html" class="weui-grid js_grid">
+						<div class="weui-grid__icon">
+							<img src="images/icon_nav_hd.png" alt="">
+						</div>
+						<p class="weui-grid__label">分数审核</p>
+					</a>
+				</div>
+				<!--公告-->
+				<div class="weui-panel weui-panel_access ">
+					<div class="weui-panel__ft">
+						<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd h-tittle">公告</div> <span class="weui-cell__ft"></span>
+						</a>
+					</div>
+					<div class="weui-panel__bd">
+						<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+							<div class="weui-media__bd">
+								<p class="weui-media__desc">欢迎0{{user.id}}号负责人 {{user.username}} 使用学生考勤管理系统</p>
+								<p class="weui-media__desc">登入时间：{{date}}</p>
+							</div>
+						</a>
+					</div>
+				</div>
+				<div class="weui-panel weui-panel_access" style="margin-bottom: 50px;">
+					<div class="weui-panel__ft">
+						<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+							<div class="weui-cell__bd h-tittle">操作须知</div> <span class="weui-cell__ft"></span>
+						</a>
+					</div>
+					<div class="weui-panel__bd">
+						<a href="javascript:;" class="weui-media-box weui-media-box_appmsg">
+							<div class="weui-media__bd">
+								<h4 class="weui-media__title">工作时间</h4>
+								<p class="weui-media__desc">时间：</p>
+							</div>
+						</a>
+					</div>
+					<div class="weui-panel__bd" style="margin-top: 15px;">
+						<a href="#" class="weui-media-box weui-media-box_appmsg">
+							<div class="weui-media__bd">
+								<h4 class="weui-media__title">联系我们</h4>
+								<p class="weui-media__desc">电话：</p>
+							</div>
+						</a>
+					</div>
+				</div>
+		</div>
+
+		<!--底部导航-->
+		<n-nav-footer :page="now_page[0]" ></n-nav-footer>
+
+	</div>
+
+
+	<!-- 加载vue实例和组件 -->
+	<script type="text/javascript" src="js/i_vues.js"></script>
+
+	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+	<script>
+		new Vue({
+			el: '#app',
+			//数据
+			data: {
+				now_page: [			//当前底部栏显示
+					'home',
+					'students',
+					'kaoqing'
+				], 
+				user: {             //用户信息
+					id: '2',         //用户编号
+					userid: 'member',     //用户账号
+					username: 'member'   //用户身份
+				},
+				date:'2019-02-12 15:30:00',
+
+			},
+			//计算属性
+			computed: {
+				
+			}
+			
+		});
+	</script>
+		
+	<script>
+		var swiper = new Swiper('.swiper-container', {
+			pagination: '.swiper-pagination',
+			paginationClickable: true,
+			autoplay: 2500
+		});
+	</script>
+	
+</body>
+
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>成员管理</title>
+
+	<link rel="stylesheet" href="css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="css/swiper.min.css" />
+	<link rel="stylesheet" href="css/weui.min.css" />
+	<link rel="stylesheet" href="css/indexcss.css" />
+
+	<!-- JS库 ajax 异步通信-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- jQuery库 -->
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	<!-- vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- 弹出框插件 toastr.css -->
+	<link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+
+		<div v-show="socre_page == 'home'" class="containar">
+			<!-- 模糊查询 -->
+			<div class="page">
+				<div class="page__bd">
+
+				</div>
+			</div>
+			<!--部门导航-->
+			<div id="select_wk" class="weui-grids" style="background: white; margin-top: 10px;">
+				<div style="width: 100%; height: auto; margin: 3px 0px 12px 0px; padding-left: 15px;">
+					<p>部门列表</p>
+				</div>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="weui-grids swiper-slide" v-for="index in dept_pages" style="background: #FFFFFF;">
+							<a href="javascript:;" @click="dept_go(i)" v-for="(dept, i) in list"
+								v-if="i<index*4 && i>=(index-1)*4" class="weui-grid">
+								<div class="weui-grid__icon">
+									<img src="images/user.jpg" alt="">
+								</div>
+								<p class="weui-grid__label">{{dept.d_name}}</p>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="weui-panel__ft" style="margin-top: 0px;"></div>
+			</div>
+			<div class="weui-cells weui-cells_checkbox">
+				<!-- 确认按钮 -->
+				<div class="page__bd page__bd_spacing" style="margin-bottom: 20px; margin-top: 15px;">
+					<input type="button" @click="page_change('addstudent')" class="weui-btn weui-btn_primary"
+						value="添加新成员" />
+				</div>
+				<li style="border-bottom: 1px solid #DFDFDF;" v-for="(stu, i) in now_dept.student">
+					<a href="javascript:;" @click="page_update(stu)" class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media__hd">
+							<img class="weui-media__thumb" src="images/ch1.jpg" alt="头像">
+						</div>
+						<div class="weui-media__bd">
+							<h4 class="weui-media__title">
+								<span class="weui-teacher-title">姓名：{{stu.s_name}} </span>
+							</h4>
+							<p class="weui-media__desc">
+								学号：{{stu.s_no}}
+							</p>
+							<p class="weui-media__desc">
+								班级：{{stu.s_class}}
+							</p>
+							<p class="weui-media__desc">
+								职位：{{stu.greed_name}}
+							</p>
+
+						</div>
+					</a>
+				</li>
+				<div class="weui-panel__ft" style="margin-top: 50px;"></div>
+			</div>
+
+		</div>
+
+		<div v-show="socre_page == 'addstudent'" class="containar" style="margin-bottom: 70px;">
+			<!-- 提示部分 -->
+			<div class="about_contain" style="margin-bottom: 10px;">
+				<ul>
+					<li>
+						<div class="weui-form-preview">
+							<div class="weui-form-preview__bd">
+								<div class="weui-form-preview__item">
+									<label class="weui-form-preview__label weui-media__title">温馨提示</label>
+									<p class="weui-form-preview__value a_title">1.仅供长沙民政职业技术学院内部使用</p>
+									<p class="weui-form-preview__value a_title">2.版权所有，盗版必究</p>
+									<p class="weui-form-preview__value a_title">3.正在开发当中，请耐心等待后续功能的完善</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="contact">
+				<ul>
+					<li><label>学号：</label> <input type="text" v-model="now_addStudent.no" placeholder="no"
+							required="required" />
+					</li>
+					<li><label>姓名：</label> <input type="text" v-model="now_addStudent.name" placeholder="name"
+							required="required" /></li>
+					<li><label>班级：</label> <input type="text" v-model="now_addStudent.class" placeholder="name"
+							required="required" /></li>
+					<li><label>部门：</label> <input type="text" :value="now_dept.d_name" placeholder="name"
+							disabled="disabled" /></li>
+					<li><label>职位级别：</label> <input type="text" v-model="now_addStudent.greed" placeholder="name"
+							required="required" /></li>
+					<li><label>职位名称：</label> <input type="text" v-model="now_addStudent.greed_name" placeholder="name"
+							required="required" /></li>
+					<li><label>电话：</label> <input type="text" v-model="now_addStudent.telephone" placeholder="name" />
+					</li>
+					<li><label>分数：</label> <input type="text" v-model="now_addStudent.score" placeholder="name" /></li>
+					<li><label>签到次数：</label> <input type="text" v-model="now_addStudent.onTimes" placeholder="name" />
+					</li>
+					<li><label>迟到次数：</label> <input type="text" v-model="now_addStudent.lateTimes" placeholder="name" />
+					</li>
+					<li><label>缺勤次数：</label> <input type="text" v-model="now_addStudent.outTimes" placeholder="name" />
+					</li>
+					<li><label>请假次数：</label> <input type="text" v-model="now_addStudent.leaveTimes"
+							placeholder="name" /></li>
+				</ul>
+			</div>
+			<div class="page__bd page__bd_spacing">
+				<input type="button" style="width: 49%; float: left;" @click="page_change('home')"
+					class="weui-btn weui-btn_plain-default" value="返回" />
+				<input type="button" @click="add()" style="width: 49%;" class="weui-btn weui-btn_primary" value=" 确认" />
+			</div>
+
+		</div>
+
+
+		<div v-show="socre_page == 'updatestudent'" class="containar" style="margin-bottom: 70px;">
+			<!-- 提示部分 -->
+			<div class="about_contain" style="margin-bottom: 10px;">
+				<ul>
+					<li>
+						<div class="weui-form-preview">
+							<div class="weui-form-preview__bd">
+								<div class="weui-form-preview__item">
+									<label class="weui-form-preview__label weui-media__title">温馨提示</label>
+									<p class="weui-form-preview__value a_title">1.仅供长沙民政职业技术学院内部使用</p>
+									<p class="weui-form-preview__value a_title">2.版权所有，盗版必究</p>
+									<p class="weui-form-preview__value a_title">3.正在开发当中，请耐心等待后续功能的完善</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="contact">
+				<ul>
+					<li><label>学号：</label> <input type="text" v-model="now_updateStu.s_no" placeholder="no"
+							required="required" />
+					</li>
+					<li><label>姓名：</label> <input type="text" v-model="now_updateStu.s_name" placeholder="name"
+							required="required" /></li>
+					<li><label>班级：</label> <input type="text" v-model="now_updateStu.s_class" placeholder="name"
+							required="required" /></li>
+					<li><label>部门：</label> <input type="text" :value="now_dept.d_name" placeholder="name"
+							disabled="disabled" /></li>
+					<li><label>职位级别：</label> <input type="text" v-model="now_updateStu.s_greed" placeholder="name"
+							required="required" /></li>
+					<li><label>职位名称：</label> <input type="text" v-model="now_updateStu.greed_name" placeholder="name"
+							required="required" /></li>
+					<li><label>电话：</label> <input type="text" v-model="now_updateStu.telephone" placeholder="name" />
+					</li>
+					<li><label>分数：</label> <input type="text" v-model="now_updateStu.score" placeholder="name" /></li>
+					<li><label>签到次数：</label> <input type="text" v-model="now_updateStu.onTimes" placeholder="name" />
+					</li>
+					<li><label>迟到次数：</label> <input type="text" v-model="now_updateStu.lateTimes" placeholder="name" />
+					</li>
+					<li><label>缺勤次数：</label> <input type="text" v-model="now_updateStu.outTimes" placeholder="name" />
+					</li>
+					<li><label>请假次数：</label> <input type="text" v-model="now_updateStu.leaveTimes" placeholder="name" />
+					</li>
+				</ul>
+			</div>
+			<div class="page__bd page__bd_spacing">
+				<input type="button" style="width: 49%; float: left;" @click="page_change('home')"
+					class="weui-btn weui-btn_plain-default" value="返回" />
+				<input type="button" @click="update(now_updateStu)" style="width: 49%;" class="weui-btn weui-btn_primary" value=" 确认" />
+			</div>
+
+		</div>
+
+		<!--底部导航-->
+		<n-nav-footer :page="now_page[1]"></n-nav-footer>
+
+	</div>
+
+
+	<!-- 加载vue实例和组件 -->
+	<script type="text/javascript" src="js/i_vues.js"></script>
+
+	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+	<script type="text/javascript" src="js/toastr.min.js"></script>
+
+
+	<script>
+		new Vue({
+			el: '#app',
+			//数据
+			data: {
+				now_page: [
+					'home',
+					'students',
+					'kaoqing'
+				],
+				socre_page: 'home',		//当前页面内容
+				now_dept: {},       //当前部门
+				index: 0,
+				now_addStudent: {
+					no: '1625123150',
+					name: '段馨',
+					class: '软开1631',
+					dept: '',
+					greed: 1,
+					greed_name: '成员',
+					telephone: '18229877879',
+					score: 10,
+					onTimes: 0,
+					lateTimes: 0,
+					outTimes: 0,
+					leaveTimes: 0
+				},
+				now_updateStu: {},
+				list: [],
+
+			},
+			//方法
+			methods: {
+				//页面改变
+				page_change: function (socre_page) {
+					this.socre_page = socre_page;
+				},
+				page_update: function (stu) {
+					this.socre_page = 'updatestudent';
+					this.now_updateStu = stu;
+				},
+				//部门跳转
+				dept_go: function (index) {
+					this.index = index;
+					this.now_dept = this.list[index];
+				},
+
+				add: function () {
+					if (true) {
+						let s = new URLSearchParams();
+						s.append('s_no', this.now_addStudent.no);
+						s.append('s_name', this.now_addStudent.name);
+						s.append('s_class', this.now_addStudent.class);
+						s.append('dept', this.now_dept.d_no);
+						console.log(this.now_dept.d_no);
+						s.append('s_greed', this.now_addStudent.greed);
+						s.append('greed_name', this.now_addStudent.greed_name);
+						s.append('telephone', this.now_addStudent.telephone);
+						s.append('score', this.now_addStudent.score);
+						s.append('onTimes', this.now_addStudent.onTimes);
+						s.append('lateTimes', this.now_addStudent.lateTimes);
+						s.append('outTimes', this.now_addStudent.outTimes);
+						s.append('leaveTimes', this.now_addStudent.leaveTimes);
+						axios.post('/api/v2/student/add', s)
+							.then(
+								(res) => {
+									console.log(res.data);
+									toastr.success('添加成功');
+									axios.get('/api/v2/data/deptlist')
+										.then(
+											(res) => {
+												console.log(res.data);
+												this.list = res.data;
+												//加载部门列表
+												this.now_dept = this.list[this.index];
+											}
+										)
+										.catch(
+											(error) => { console.log(error); }
+										);
+									this.socre_page = 'home';
+								}
+							)
+							.catch(
+								(error) => { console.log(error); }
+							);
+					} else {
+						toastr.warning('请填写数据');
+					}
+				},
+				update: function (stu) {
+					console.log(stu);
+
+					axios.post('/api/v2/student/update', stu)
+						.then(
+							(res) => {
+								if (res.data) {
+									toastr.success('学生修改成功');
+									axios.get('/api/v2/data/deptlist')
+										.then(
+											(res) => {
+												console.log(res.data);
+												this.list = res.data;
+												this.now_dept = this.list[this.index];
+											}
+										)
+										.catch(
+											(error) => { console.log(error); }
+										);
+									this.socre_page = 'home';
+								} else {
+									toastr.warning('学生修改失败');
+								}
+
+							}
+						)
+						.catch(
+							(error) => { console.log(error); }
+						);
+				},
+			},
+
+			//挂载
+			mounted() {
+
+				axios.get('/api/v2/data/deptlist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.list = res.data;
+							//加载部门列表
+							this.now_dept = this.list[0];
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+
+
+
+			},
+
+			computed: {
+				dept_pages: function () {
+					return Math.ceil(this.list.length / 4);
+				},
+			},
+
+		});
+	</script>
+
+	<script>
+		var swiper = new Swiper('.swiper-container', {
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		});
+	</script>
+
+	<script>
+		//提示插件显示位置 - 中上
+		toastr.options.positionClass = 'toast-top-center';
+	</script>
+
+</body>
+
+</html>

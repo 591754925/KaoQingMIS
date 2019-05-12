@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>分数审核</title>
+
+	<link rel="stylesheet" href="css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="css/swiper.min.css" />
+	<link rel="stylesheet" href="css/weui.min.css" />
+	<link rel="stylesheet" href="css/indexcss.css" />
+
+	<!-- JS库 ajax 异步通信-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- jQuery库 -->
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	<!-- vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- 弹出框插件 toastr.css -->
+	<link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="containar">
+			<!-- 提示部分 -->
+			<div class="about_contain" style="margin-bottom: 10px;">
+				<ul>
+					<li>
+						<div class="weui-form-preview">
+							<div class="weui-form-preview__bd">
+								<div class="weui-form-preview__item">
+									<label class="weui-form-preview__label weui-media__title">温馨提示</label>
+									<p class="weui-form-preview__value a_title">1.仅供长沙民政职业技术学院内部使用</p>
+									<p class="weui-form-preview__value a_title">2.版权所有，盗版必究</p>
+									<p class="weui-form-preview__value a_title">3.正在开发当中，请耐心等待后续功能的完善</p>
+									<p class="weui-form-preview__value a_title">4.审核制度：</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- 表单文本框部分 -->
+			<div v-if="socre_page=='home'" class="weui-cells weui-cells_form" style="padding:10px;">
+				<form action="Info_patient" method="post" name="cForm">
+					<div class="page__bd page__bd_spacing" style="margin-top: 35px;">
+						<input type="button" style="background: #007bff;" @click="page_change('add')"
+							class="weui-btn weui-btn_primary" value="加分审核" />
+					</div>
+					<div class="page__bd page__bd_spacing" style="margin-top: 30px;">
+						<input type="button" style="background: #007bff;" @click="page_change('del')"
+							class="weui-btn weui-btn_primary" value="减分审核" />
+					</div>
+					<div class="page__bd page__bd_spacing" style="margin-bottom: 55px; margin-top: 30px;">
+						<input type="button" style="background: #007bff;" @click="page_change('sel')"
+							class="weui-btn weui-btn_primary" value="查看审核记录" />
+					</div>
+				</form>
+			</div>
+
+			<div v-if="socre_page=='sel'" class="weui-panel weui-panel_access ">
+				<div class="page__bd page__bd_spacing" style="padding: 10px;">
+					<input type="button" @click="page_change('home')" class="weui-btn weui-btn_plain-default"
+						value="返回" />
+				</div>
+				<div v-for="(sc,i) in scoreList" class="weui-panel__ft">
+					<a href="javascript:;" class="weui-cell weui-cell_access weui-cell_link">
+						<div class="weui-cell__bd h-tittle">
+							<h4 class="weui-media__title">编号: {{sc.id}}</h4>
+							<h4 class="weui-media__title">姓名：{{sc.student.s_name}}</h4>
+							<h4 class="weui-media__title">学号：{{sc.student.s_no}}</h4>
+							<h4 class="weui-media__title">审核时间: {{sc.time}}</h4>
+							<h4 class="weui-media__title">当前分数: {{sc.score}}
+								<span v-if="sc.addScore != 0" style="color:green; padding-left: 100px;">修改分数: +
+									{{sc.addScore}}</span>
+								<span v-if="sc.delScore != 0" style="color:red; padding-left: 100px;">修改分数: -
+									{{sc.delScore}}</span>
+							</h4>
+							<h4 v-if="sc.addScore != 0" class="weui-media__title" style="color:green"> 加分原因:
+								{{sc.addCause}}</h4>
+							<h4 v-if="sc.delScore != 0" class="weui-media__title" style="color:red">减分原因:
+								{{sc.delCause}}</h4>
+						</div>
+					</a>
+				</div>
+			</div>
+
+			<div v-if="socre_page=='add'">
+				<div class="contact">
+					<ul>
+						<li><label>学号：</label> <input type="text" v-model="now_score.s_no" placeholder="no"
+								required="required" />
+						</li>
+						<li><label>姓名：</label> <input type="text" v-model="now_score.s_name" placeholder="name"
+								required="required" /></li>
+						<li><label style="color: green;">加分分数：</label> <input type="text" v-model="now_score.addScore"
+								placeholder="add_score" required="required" /></li>
+						<li><label style="color: green;">加分时间：</label> <input type="text" id="datetime-picker"
+								v-model="now_score.time" placeholder="time" required="required" /></li>
+						<li><label style="color: green;">加分原因：</label><textarea v-model="now_score.addCause" rows="5"
+								cols="26"
+								style="border: 1px solid #AAAAAA;border-radius: 5px;padding: 3px 8px;"></textarea></li>
+					</ul>
+				</div>
+				<div class="page__bd page__bd_spacing">
+					<input type="button" style="width: 49%; float: left;" @click="page_change('home')"
+						class="weui-btn weui-btn_plain-default" value="返回" />
+					<input type="button" @click="add_score()" style="width: 49%;" class="weui-btn weui-btn_primary"
+						value=" 确认" />
+				</div>
+			</div>
+
+			<div v-if="socre_page=='del'">
+				<div class="contact">
+					<ul>
+						<li><label>学号：</label> <input type="text" v-model="now_score.s_no" placeholder="no"
+								required="required" />
+						</li>
+						<li><label>姓名：</label> <input type="text" v-model="now_score.s_name" placeholder="name"
+								required="required" /></li>
+						<li><label style="color: red;">减分分数：</label> <input type="text" v-model="now_score.delScore"
+								placeholder="del_score" required="required" /></li>
+						<li><label style="color: red;">减分时间：</label> <input type="text" id="datetime-picker"
+								v-model="now_score.time" placeholder="time" required="required" /></li>
+						<li><label style="color: red;">减分原因：</label><textarea v-model="now_score.delCause" rows="5"
+								cols="26"
+								style="border: 1px solid #AAAAAA;border-radius: 5px;padding: 3px 8px;"></textarea></li>
+					</ul>
+				</div>
+				<div class="page__bd page__bd_spacing">
+					<input type="button" style="width: 49%; float: left;" @click="page_change('home')"
+						class="weui-btn weui-btn_plain-default" value="返回" />
+					<input type="button" @click="del_score()" style="width: 49%;" class="weui-btn weui-btn_primary" value=" 确认" />
+				</div>
+			</div>
+			<div class="weui-panel__ft" style="margin-top: 50px;"></div>
+		</div>
+
+		<!--底部导航-->
+		<n-nav-footer :page="now_page[0]"></n-nav-footer>
+
+	</div>
+
+
+
+
+	<!-- 加载vue实例和组件 -->
+	<script type="text/javascript" src="js/i_vues.js"></script>
+
+	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+
+
+	<script>
+		new Vue({
+			el: '#app',
+			//数据
+			data: {
+				now_page: [
+					'home',
+					'students',
+					'kaoqing'
+				],
+				socre_page: 'home',
+				now_score: {
+					s_name: 'yhj',
+					s_no: '1625123101',
+					score: '10',
+					time: '2019-3-2 13:19',
+					addScore: 0,
+					addCause: '',
+					delScore: 0,
+					delCause: ''
+				},
+				scoreList: [],
+
+
+			},
+			//方法
+			methods: {
+				//页面改变
+				page_change: function (socre_page) {
+					this.socre_page = socre_page;
+				},
+
+				add_score: function () {
+					if (this.now_score.addScore != 0 && this.now_score.addCause != '') {
+						let s = new URLSearchParams();
+						s.append('tagle', 'add');
+						s.append('s_no', this.now_score.s_no);
+						s.append('time', this.now_score.time);
+						s.append('score', this.now_score.addScore);
+						s.append('cause', this.now_score.addCause);
+						axios.post('/api/v2/score/add', s)
+							.then(
+								(res) => {
+									console.log(res.data);
+									toastr.success('添加成功');
+								}
+							)
+							.catch(
+								(error) => { console.log(error); }
+							);
+					}else {
+						toastr.success('请填写数据');
+					}
+				},
+
+				del_score: function () {
+					if (this.now_score.delScore != 0 && this.now_score.delCause != '') {
+						let s = new URLSearchParams();
+						s.append('tagle', 'del');
+						s.append('s_no', this.now_score.s_no);
+						s.append('time', this.now_score.time);
+						s.append('score', this.now_score.delScore);
+						s.append('cause', this.now_score.delCause);
+						axios.post('/api/v2/score/add', s)
+							.then(
+								(res) => {
+									console.log(res.data);
+									toastr.success('添加成功');
+								}
+							)
+							.catch(
+								(error) => { console.log(error); }
+							);
+					}else {
+						toastr.warning("请填写数据！");
+					}
+				},
+
+			},
+
+			//挂载
+			mounted() {
+				axios.get('/api/v2/data/scorelist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.scoreList = res.data;
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+
+			},
+
+		});
+	</script>
+	<script type="text/javascript" src="js/toastr.min.js"></script>
+	<script>
+		//提示插件显示位置 - 中上
+		toastr.options.positionClass = 'toast-top-center';
+	</script>
+</body>
+
+</html>

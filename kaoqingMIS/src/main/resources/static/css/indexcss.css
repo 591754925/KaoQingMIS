@@ -1,0 +1,182 @@
+/* 通用样式 */
+* {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+ul, li {
+	margin: 0;
+	padding: 0;
+	border: none;
+	list-style: none;
+}
+
+html, body {
+	width: 100%;
+	height: auto;
+	font-family: "microsoft yahei,微软雅黑 ";
+	background-color: #f3f4f6;
+}
+
+.containar {
+	width: 100%;
+	height: auto;
+	background-color: #f3f4f6;
+}
+
+.weui-grids:before {
+	right: 0;
+	height: 0px;
+	border-top: 0px solid #d9d9d9;
+	transform-origin: 0 0;
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+}
+
+.weui-grid:before {
+	top: 0;
+	width: 0px;
+	border-right: 1px solid #f3f4f6;
+	-webkit-transform-origin: 100% 0;
+	transform-origin: 100% 0;
+	-webkit-transform: scaleX(.5);
+	transform: scaleX(.5);
+}
+
+.weui-grid {
+	width: 25%;
+}
+
+.weui-grids {
+	padding: 10px 0px;
+	margin-top: -5px;
+}
+
+.weui-grid:after {
+	left: 0;
+	height: 0px;
+	border-bottom: 0px solid #d9d9d9;
+}
+
+.weui-grids:after {
+	width: 1px;
+	bottom: 0;
+	border-bottom: 1px solid #d9d9d9;
+	transform-origin: 0 0;
+	-webkit-transform: scaleX(.5);
+	transform: scaleX(.5);
+	background: #D9D9D9;
+}
+
+.weui-media-box:before {
+	content: " ";
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	height: 1px;
+	border-top: 1px solid #f3f4f6;
+	color: #f3f4f6;
+	-webkit-transform-origin: 0 0;
+	transform-origin: 0 0;
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	left: 15px;
+}
+
+.weui-media-box:after {
+	content: " ";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height: 1px;
+	border-bottom: 1px solid #f3f4f6;
+	color: #f3f4f6;
+	-webkit-transform-origin: 0 100%;
+	transform-origin: 0 100%;
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	left: 15px;
+}
+
+.weui-panel__ft .weui-cell_link:after {
+	content: " ";
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height: 1px;
+	border-bottom: 1px solid #f3f4f6;
+	color: #f3f4f6;
+	-webkit-transform-origin: 0 100%;
+	transform-origin: 0 100%;
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	left: 15px;
+}
+
+.weui-grid__label {
+	color: #41444a;
+	/*	font-weight: bold;*/
+}
+
+.h-tittle {
+	color: #999;
+}
+
+.footer {
+	position: fixed !important;
+	/*height: 58px;*/
+	bottom: 0px;
+}
+
+.bot {
+	margin: 2px 0px 0px 0px;
+	padding-left: 2px;
+	width: 100%;
+	height: 50px;
+}
+
+.contact {
+	width: 95%;
+	height: auto;
+	background: white;
+	margin: 15px 0;
+	padding: 10px;
+}
+
+.contact ul {
+	width: 100%;
+}
+
+.contact ul li {
+	border-bottom: 1px solid #DFDFDF;
+	padding: 12px;
+}
+
+.contact ul li label {
+	width: 26%;
+	display: inline-block;
+	float: left;
+}
+
+.contact ul li input[type=text] {
+	width: 195px;
+	height: 20px;
+	border: 1px solid #AAAAAA;
+	background: url('../images/red_asterisk.png') no-repeat #FFF 98%;
+	border-radius: 5px;
+	transition: padding .25s;
+	-o-transition: padding .25s;
+	-moz-transition: padding 0.25s;
+	-webkit-transition: padding 0.25s;
+	padding: 3px 8px;
+}
+
+.contact ul li input:focus {
+	border-color: #C00;
+	background-image: url('../images/invalid.png');
+	padding-right: 35px;
+}

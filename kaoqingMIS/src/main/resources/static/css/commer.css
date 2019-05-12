@@ -1,0 +1,83 @@
+/***通用样式***/
+a{color:#185697;text-decoration:none;}
+a:hover {text-decoration:none;color:#f30;}
+Img{border:0;vertical-align:middle;}
+ul{list-style-type:none;}
+input, select{vertical-align:middle;}
+body{font-size:12px; line-height:22px;color:#333;}
+
+/*********************头部导航栏样式*************************/
+#logo{position:absolute;left:0;top:12px;}
+#logo a{display:block;}
+.banner{background:#358edd url(../images/banner.jpg) repeat-x top;}
+.bgh{background:url(../images/topbgright.jpg) no-repeat top right;}
+.page{width:980px; margin:0 auto; height:70px;position:relative; }
+
+.blog_nav{overflow:hidden; _zoom:1; height:29px; line-height:29px; font-size:13px; margin-top:5px; width:800px; position:absolute; bottom:0; left:177px;}
+.blog_nav ul{padding-left:10px;}
+.blog_nav ul li{float:left; text-align:center;width:90px; letter-spacing:2px; margin-right:8px; background:url(../images/sns_top_nav_bg.png) repeat-x;border:1px #6fb0e9 solid; border-bottom:none;}
+.blog_nav ul li a{color:#fff;display:block;}
+.blog_nav ul li a:hover{background:url(../images/nav_hover.png) repeat-x; }
+.blog_nav .hover{ background:url(../images/nav_hover.png) repeat-x; width:90px;}
+
+.topxx{ text-align:right; height:24px;color:#fff; padding:0px 0px 5px 20px; letter-spacing:3px; font-size:13px;}
+.topxx a{color:#fff; margin-left:5px; text-decoration:underline;}
+
+/*********************左侧导航栏样式*************************/
+.box{overflow:hidden; _zoom:1;}
+.mtop{margin-top:10px;}
+.leftbox{width:140px; float:left;}
+.l_nav2{border:#bdd7f2 1px solid; border-top:#0080c4 4px solid;border-bottom:#0080c4 4px solid; background:#ebf7ff url(../images/leftdhbg.jpg) repeat-y right; margin-left:10px;}
+.l_nav2 .ta1{border-bottom:1px #98c9ee solid; display:block; text-align:center; position:relative; height:38px;line-height:38px;}
+.leftbgbt{position:absolute; background:url(../images/leftbgbt.jpg) no-repeat; width:11px; height:52px; left:-11px; top:-4px;}
+.leftbgbt2{position:absolute; background:url(../images/leftbgbt2.jpg) no-repeat; width:11px; height:48px; left:-11px; top:-1px;}
+.cdlist div{height:29px; line-height:24px;border-bottom:1px #98c9ee dotted;}
+.cdlist div a{ display:block; background:#fff;line-height:28px;height:28px; text-align:center;}
+.cdlist div a:hover{color:#f30;background:#0080c4; color:#D2D2D2;}
+
+
+/*********************右侧导航栏样式*************************/
+.rightbox{ margin-left:155px; min-height:500px; _height:500px;}
+.dhbg{padding-top:20px; overflow:hidden; _zoom:1;}
+.dh1{background:url(../images/b_.jpg) no-repeat; width:370px; height:215px; float:left;}
+.dh1:hover{background:url(../images/b.jpg) no-repeat;}
+.dhwz{padding:60px 0 0 80px; line-height:24px;}
+.dhwz p{background:url(../images/ico1.jpg) no-repeat 0 17px; padding-left:10px; font-size: 30px; font-family:"楷体"; color:#419DE4;}
+
+
+
+/*************右侧内容表格************/
+.mbx{color:#185697; font-size:12px; margin-bottom:10px; font-weight:100; border-bottom:1px #ddd dotted; line-height:30px;}
+.feilei{ background:#edf7ff; border:1px #b5daf7 solid; line-height:36px; border-top:3px #419de4 solid; color:#1875b5; padding-left:12px;}
+.fllist{border:1px #b5daf7 solid; border-top:0; padding:10px 2px 15px; font-size:10px;}
+.fllist ul li{border-bottom:1px #e1f2ff dotted; line-height:28px;  padding:0px;}
+.fllist ul li .hover{background:#409de4; color:#fff; padding:3px 5px;}
+.fllist ul li a{margin-right:10px; border-right:1px #b5daf7 solid; padding-right:10px;}
+
+.cztable{padding:0px 0;}
+.cztable table{border-bottom:#cfe1f9 solid 4px;border-right:#cfe1f9 solid 1px;}
+.cztable td, .cztable th{border-top:#cfe1f9 solid 1px; border-left:#cfe1f9 solid 1px; padding:6px 5px; }
+.cztable th{background:#eef7fc  repeat-x; line-height:22px; color:#185697;}
+.cztable td a{color:#185697;}
+.cztable .xxleft{text-align:left;}
+
+
+/******************分页*****************/
+
+.MainStyle {
+	padding:10px;
+	text-align:center;
+}
+.MainStyle div{display:inline; margin-right:5px;}
+.MainStyle a {
+	padding:2px 6px;
+	border:1px #4890cf solid;
+	background:#fff;
+	color:#000;
+}
+.MainStyle a:hover{background:#cee2f3; color:#000;}
+.MainStyle .NowItemStyle a{border:1px #297bc3 solid; color:#fff; background:#4890cf; font-weight:700;}
+
+
+
+

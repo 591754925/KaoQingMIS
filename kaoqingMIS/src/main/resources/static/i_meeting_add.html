@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>会议管理</title>
+
+	<link rel="stylesheet" href="css/jquery-weui.min.css" />
+	<link rel="stylesheet" href="css/swiper.min.css" />
+	<link rel="stylesheet" href="css/weui.min.css" />
+	<link rel="stylesheet" href="css/indexcss.css" />
+
+	<!-- JS库 ajax 异步通信-->
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+	<!-- jQuery库 -->
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+	<!-- vue.js -->
+	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+	<!-- 弹出框插件 toastr.css -->
+	<link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+	<div id="app">
+		<div class="containar">
+			<!-- 提示部分 -->
+			<div class="about_contain" style="margin-bottom: 10px;">
+				<ul>
+					<li>
+						<div class="weui-form-preview">
+							<div class="weui-form-preview__bd">
+								<div class="weui-form-preview__item">
+									<label class="weui-form-preview__label weui-media__title">温馨提示</label>
+									<p class="weui-form-preview__value a_title">1.仅供长沙民政职业技术学院内部使用</p>
+									<p class="weui-form-preview__value a_title">2.版权所有，盗版必究</p>
+									<p class="weui-form-preview__value a_title">3.正在开发当中，请耐心等待后续功能的完善</p>
+								</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+
+			<!-- 添加会议add -->
+			<div class="weui-panel weui-panel_access ">
+				<div class="page__bd page__bd_spacing" style="padding-bottom: 10px;">
+
+					<a href="i_meeting.html"><input type="button" style="width: 32%; display: inline;"
+							class="weui-btn weui-btn_plain-default" value="返回" /></a>
+					<input type="button" @click="meetnoall()" style="width: 32%; display: inline; background: #6c757d;;" class="weui-btn"
+						value="取消全选" />
+					<input type="button" style="width: 33%; display: inline;" @click="meetall()" class="weui-btn weui-btn_primary"
+						value=" 大会" />
+				</div>
+			</div>
+			<!-- 会议表单-->
+
+
+			<!--部门导航-->
+			<div id="select_wk" class="weui-grids" style="background: white; margin-top: 10px;">
+				<div class="contact">
+					<ul>
+						<li><label>会议名称：</label> <input type="text" v-model="now_meeting.name" placeholder="meet_name"
+								required="required" /></li>
+
+						<li><label>会议时间：</label> <input type="text" v-model="now_meeting.time" placeholder="meet_time"
+								required="required" /></li>
+
+						<li><label>会议地点：</label> <input type="text" v-model="now_meeting.address"
+								placeholder="meet_place" required="required" /></li>
+
+
+					</ul>
+				</div>
+				<div style="width: 100%; height: auto; margin: 3px 0px 12px 0px; padding-left: 15px;">
+					<p>部门列表</p>
+				</div>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<div class="weui-grids swiper-slide" v-for="index in dept_pages" style="background: #FFFFFF;">
+							<a href="javascript:;" @click="dept_go(i)" v-for="(dept, i) in list"
+								v-if="i<index*4 && i>=(index-1)*4" class="weui-grid">
+								<div class="weui-grid__icon">
+									<img src="images/user.jpg" alt="">
+								</div>
+								<p class="weui-grid__label">{{dept.d_name}}</p>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<div class="weui-panel__ft" style="margin-top: 0px;"></div>
+			</div>
+			<div class="weui-cells weui-cells_checkbox">
+				<!-- 全选按钮 -->
+				<div class="page__bd page__bd_spacing" style="margin-bottom: 20px; margin-top: 15px; padding: 10px;">
+					<input type="button" @click="all()" style="width: 32%; display: inline; background: #007bff;"
+						class="weui-btn weui-btn_primary" value="全选" />
+					<input type="button" @click="noall()" style="width: 32%; display: inline; background: #6c757d;"
+						class="weui-btn weui-btn_primary" value="取消全选" />
+					<input type="button" @click="meeting_add()" style="width: 33%; display: inline;"
+						class="weui-btn weui-btn_primary" value="添加会议" />
+				</div>
+
+				<li style="border-bottom: 1px solid #DFDFDF;" v-for="(stu, i) in now_dept.student">
+					<a href="javascript:;" class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media__hd">
+							<img class="weui-media__thumb" src="images/ch1.jpg" alt="头像">
+						</div>
+						<div class="weui-media__bd">
+							<h4 class="weui-media__title">
+								<span class="weui-teacher-title">姓名：{{stu.s_name}} </span>
+							</h4>
+							<p class="weui-media__desc">
+								学号：{{stu.s_no}}
+							</p>
+							<p class="weui-media__desc">
+								班级：{{stu.s_class}}
+							</p>
+							<p class="weui-media__desc">
+								职位：{{stu.greed_name}}
+							</p>
+
+						</div>
+						<input type="checkbox" v-model="now_meeting.students" :value="stu.s_no">
+					</a>
+				</li>
+			</div>
+
+			<div class="weui-panel__ft" style="margin-top: 50px;"></div>
+		</div>
+
+		<!--底部导航-->
+		<n-nav-footer :page="now_page[0]"></n-nav-footer>
+
+	</div>
+
+
+
+
+	<!-- 加载vue实例和组件 -->
+	<script type="text/javascript" src="js/i_vues.js"></script>
+
+	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
+	<script type="text/javascript" src="js/swiper.js"></script>
+	<script type="text/javascript" src="js/toastr.min.js"></script>
+
+	<script>
+		new Vue({
+			el: '#app',
+			//数据
+			data: {
+				now_page: [
+					'home',
+					'students',
+					'kaoqing'
+				],
+				now_meeting: {		//当前会议数据
+					id: '',
+					name: '课间会议',
+					time: '2019-02-12 15:30:00',
+					address: '软件大厅',
+					students: [],
+				},
+				now_dept: {},       //当前部门
+				list: [],			//部门列表
+			},
+			//方法
+			methods: {
+				//页面改变
+				page_change: function (meeting_page) {
+					this.meeting_page = meeting_page;
+				},
+				//部门跳转
+				dept_go: function (index) {
+					this.now_dept = this.list[index];
+				},
+				//全选
+				all: function () {
+					let arr = this.now_meeting.students;
+					
+					for (let index = 0; index < this.now_dept.student.length; index++) {
+						
+						let tagle = true;
+						for (let i = 0; i < arr.length; i++) {
+							if (arr[i] === this.now_dept.student[index].s_no) {
+								tagle = false;
+							}
+						}
+						if (tagle) {
+							arr.push(this.now_dept.student[index].s_no);
+						}
+					}
+					console.log(this.now_meeting.students);
+				},
+				//取消全选
+				noall: function () {
+					let arr = this.now_meeting.students;
+					for (let index = 0; index < this.now_dept.student.length; index++) {
+						for (let i = 0; i < arr.length; i++) {
+							if (arr[i] === this.now_dept.student[index].s_no) {
+								arr.splice(i, 1);
+							}
+						}
+					}
+				},
+				//大会全选
+				meetall: function () {
+					let dept;
+					let arr = this.now_meeting.students;
+					for(let x = 0; x < this.list.length; x++){
+						dept = this.list[x];
+						for (let index = 0; index < dept.student.length; index++) {
+							let tagle = true;
+							for (let i = 0; i < arr.length; i++) {
+								if (arr[i] === dept.student[index].s_no) {
+									tagle = false;
+								}
+							}
+							if (tagle) {
+								arr.push(dept.student[index].s_no);
+							}
+						}
+					}
+					console.log(this.now_meeting.students);
+				},
+				//大会取消全选
+				meetnoall: function(){
+					this.now_meeting.students = [];
+				},
+
+				//-------------请求-------------//
+				//添加会议
+				meeting_add: function () {
+					console.log(this.now_meeting);
+					let stu = this.now_meeting;
+					axios.post('/api/v2/meeting/add', stu)
+						.then(
+							(res) => {
+								if (res.data) {
+									toastr.success('会议添加成功');
+									
+									
+								} else {
+									toastr.warning('部门添加失败');
+								}
+
+							}
+						)
+						.catch(
+							(error) => { console.log(error); }
+						);
+				},
+
+			},
+
+			//挂载
+			mounted() {
+				axios.get('/api/v2/data/deptlist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.list = res.data;
+							//加载部门列表
+							this.now_dept = this.list[0];
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+
+			},
+
+			computed: {
+				dept_pages: function () {
+					return Math.ceil(this.list.length / 4);
+				},
+			},
+		});
+	</script>
+
+	<script>
+		toastr.options.positionClass = 'toast-top-center';
+		var swiper = new Swiper('.swiper-container', {
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		});
+	</script>
+
+</body>
+
+</html>

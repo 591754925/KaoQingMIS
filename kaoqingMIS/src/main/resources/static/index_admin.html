@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>学生考勤系统</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <!-- commer CSS  -->
+    <link rel="stylesheet" href="css/commer.css">
+
+    <!-- JS库 ajax 异步通信-->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- jQuery库 -->
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
+    <!-- vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!-- 弹出框插件 toastr.css -->
+    <link href="css/toastr.min.css" rel="stylesheet" type="text/css" />
+
+
+</head>
+
+<body>
+    <!-- app主容器,为app最外层，用来给Vue实例定位-->
+    <div id="app">
+        <!-- 顶部导航栏 -->
+        <n-navbar></n-navbar>
+        <!-- 内容页 -->
+        <div class="page">
+            <div class="box mtop">
+                <!-- 左侧导航栏 -->
+                <n-navbar-left :list="list" v-on:dept_go="dept_go" v-on:page_go="page_go"
+                    v-on:updatescore="updatescore"></n-navbar-left>
+
+                <!-- 首页右侧内容栏-->
+                <n-right-home v-if="now_page == 'home'" 
+                v-on:dept_go="dept_go" v-on:page_go="page_go"></n-right-home>
+
+                <!-- 成员管理 -->
+                <n-right-student v-if="now_page == 'student'" :dept_limit="dept_limit" :dept_pages="dept_pages"
+                    :dept_nums="dept_nums" :now_dept="now_dept" :addstudent="addstudent" :addstudent_tagle="addstudent_tagle"
+                    :updatestudent="updatestudent"
+                    v-on:dept_page="dept_page" v-on:change_addstudent="change_addstudent" v-on:change_updatestudent="change_updatestudent"
+                    v-on:student_add="student_add" v-on:student_update="student_update" v-on:student_remove="student_remove"></n-right-student>
+
+                <!-- 账号管理 -->
+                <n-right-admin v-if="now_page == 'admin'" :admins="admins" :addadmin_tagle="addadmin_tagle"
+                :addadmin="addadmin" :updateadmin="updateadmin"
+                v-on:change_addadmin="change_addadmin" v-on:change_updateadmin="change_updateadmin"
+                v-on:admin_add="admin_add" v-on:admin_remove="admin_remove" v-on:admin_update="admin_update"></n-right-admin>
+
+                <!-- 部门管理 -->
+                <n-right-dept v-if="now_page == 'dept'" :list="list" :adddept_tagle="adddept_tagle"
+                :adddept="adddept" :updatedept="updatedept"
+                v-on:change_adddept="change_adddept" v-on:change_updatedept="change_updatedept" v-on:dept_remove="dept_remove"
+                v-on:dept_add="dept_add" v-on:dept_update="dept_update"></n-right-dept>
+
+                <!-- 审核管理 -->
+                <n-right-score v-if="now_page == 'score'" :scores="scores" :score_limit="score_limit"
+                    :score_nums="score_nums" :score_pages="score_pages" 
+                    v-on:score_page="score_page" v-on:score_remove="score_remove"> </n-right-score>
+
+                <!-- 加分减分审核 -->
+                <n-right-updatescore v-if="now_page == 'scoreupdate'" :score_limit="score_limit"
+                    :now_score="now_score" 
+                    v-on:score_add="score_add" ></n-right-updatescore>
+
+                <!-- Excel文件管理 -->
+                <n-right-excel v-if="now_page == 'excel'" :excel="excel"
+                v-on:file_write="file_write"></n-right-excel>
+
+                <!-- 操作须知 -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+    <!-- 加载vue实例和组件 -->
+    <script type="text/javascript" src="js/myvue.js"></script>
+
+    <!-- 弹出框插件 toastr.js -->
+    <script type="text/javascript" src="js/toastr.min.js"></script>
+
+    <!-- 事件监听 myjs.js -->
+    <script type="text/javascript" src="js/myjs.js"></script>
+
+    <script>
+        //提示插件显示位置 - 中上
+        toastr.options.positionClass = 'toast-top-center';
+	</script>
+
+</body>
+
+</html>
