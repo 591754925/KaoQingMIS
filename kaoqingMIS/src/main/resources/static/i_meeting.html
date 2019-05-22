@@ -49,8 +49,7 @@
 			<div v-if="meeting_page=='home'" style="padding:10px;">
 				<div class="weui-panel weui-panel_access ">
 					<div class="weui-panel__ft">
-						<a href="i_meeting_add.html"
-							class="weui-cell weui-cell_access weui-cell_link">
+						<a href="i_meeting_add.html" class="weui-cell weui-cell_access weui-cell_link">
 							<div class="weui-cell__bd h-tittle">
 								<h4 class="weui-media__title">添加会议</h4>
 							</div> <span class="weui-cell__ft"></span>
@@ -78,7 +77,8 @@
 							value="返回" />
 					</div>
 					<div v-for="(m, i) in meetingList" class="weui-panel__ft">
-						<a href="javascript:;" class="weui-cell weui-cell_access weui-cell_link">
+						<a href="javascript:;" @click="page_update(m)"
+							class="weui-cell weui-cell_access weui-cell_link">
 							<div class="weui-cell__bd h-tittle">
 								<h3 class="weui-media__title">编号: {{m.no}}</h3>
 								<h3 class="weui-media__title">会议: {{m.name}}</h3>
@@ -89,11 +89,105 @@
 						</a>
 					</div>
 				</div>
+
 			</div>
+			<!-- 修改会议 -->
+			<div v-show="meeting_page == 'update'">
+				<div class="weui-panel weui-panel_access ">
 
-			
+					<div class="weui-panel weui-panel_access ">
+						<div class="page__bd page__bd_spacing" style="padding-bottom: 10px;">
+
+							<a href="javascript:;" @click="page_change('sel')"><input type="button"
+									style="width: 32%; display: inline;" class="weui-btn weui-btn_plain-default"
+									value="返回" /></a>
+							<input type="button" @click="meetnoall()"
+								style="width: 32%; display: inline; background: #6c757d;;" class="weui-btn"
+								value="取消全选" />
+							<input type="button" style="width: 33%; display: inline;" @click="meetall()"
+								class="weui-btn weui-btn_primary" value=" 大会" />
+						</div>
+					</div>
+					<!-- 会议表单-->
 
 
+					<!--部门导航-->
+					<div id="select_wk" class="weui-grids" style="background: white; margin-top: 10px;">
+						<div class="contact">
+							<ul>
+								<li><label>会议名称：</label> <input type="text" v-model="now_meeting.name"
+										placeholder="meet_name" required="required" /></li>
+
+								<li><label>会议时间：</label> <input type="text" v-model="now_meeting.time"
+										placeholder="meet_time" required="required" /></li>
+
+								<li><label>会议地点：</label> <input type="text" v-model="now_meeting.address"
+										placeholder="meet_place" required="required" /></li>
+
+
+							</ul>
+						</div>
+						<div style="width: 100%; height: auto; margin: 3px 0px 12px 0px; padding-left: 15px;">
+							<p>部门列表</p>
+						</div>
+						<div class="swiper-container">
+							<div class="swiper-wrapper">
+								<div class="weui-grids swiper-slide" v-for="index in dept_pages"
+									style="background: #FFFFFF;">
+									<a href="javascript:;" @click="dept_go(i)" v-for="(dept, i) in list"
+										v-if="i<index*4 && i>=(index-1)*4" class="weui-grid">
+										<div class="weui-grid__icon">
+											<img src="images/user.jpg" alt="">
+										</div>
+										<p class="weui-grid__label">{{dept.d_name}}</p>
+									</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="weui-panel__ft" style="margin-top: 0px;"></div>
+					</div>
+					<div class="weui-cells weui-cells_checkbox">
+						<!-- 全选按钮 -->
+						<div class="page__bd page__bd_spacing"
+							style="margin-bottom: 20px; margin-top: 15px; padding: 10px;">
+							<input type="button" @click="all()"
+								style="width: 32%; display: inline; background: #007bff;"
+								class="weui-btn weui-btn_primary" value="全选" />
+							<input type="button" @click="noall()"
+								style="width: 32%; display: inline; background: #6c757d;"
+								class="weui-btn weui-btn_primary" value="取消全选" />
+							<input type="button" @click="meeting_update()"
+								style="width: 33%; display: inline; background:firebrick;"
+								class="weui-btn weui-btn_primary" value="修改会议" />
+						</div>
+
+						<li style="border-bottom: 1px solid #DFDFDF;" v-for="(stu, i) in now_dept.student">
+							<a href="javascript:;" class="weui-media-box weui-media-box_appmsg">
+								<div class="weui-media__hd">
+									<img class="weui-media__thumb" src="images/ch1.jpg" alt="头像">
+								</div>
+								<div class="weui-media__bd">
+									<h4 class="weui-media__title">
+										<span class="weui-teacher-title">姓名：{{stu.s_name}} </span>
+									</h4>
+									<p class="weui-media__desc">
+										学号：{{stu.s_no}}
+									</p>
+									<p class="weui-media__desc">
+										班级：{{stu.s_class}}
+									</p>
+									<p class="weui-media__desc">
+										职位：{{stu.greed_name}}
+									</p>
+
+								</div>
+								<input type="checkbox" v-model="now_meeting.students" :value="stu.s_no">
+							</a>
+						</li>
+					</div>
+				</div>
+			</div>
 			<div class="weui-panel__ft" style="margin-top: 50px;"></div>
 		</div>
 
@@ -110,7 +204,7 @@
 
 	<script type="text/javascript" src="js/jquery-weui.min.js"></script>
 	<script type="text/javascript" src="js/swiper.js"></script>
-
+	<script type="text/javascript" src="js/toastr.min.js"></script>
 
 	<script>
 		new Vue({
@@ -124,7 +218,16 @@
 				],
 				meeting_page: 'home',
 
+				now_meeting: {		//当前会议数据
+					no: '',
+					name: '',
+					time: '',
+					address: '',
+					students: [],
+				},
 				meetingList: [],
+				now_dept: {},       //当前部门
+				list: [],			//部门列表
 			},
 			//方法
 			methods: {
@@ -132,7 +235,109 @@
 				page_change: function (meeting_page) {
 					this.meeting_page = meeting_page;
 				},
+				//修改指定会议
+				page_update: function (m) {
+					this.meeting_page = 'update';
+					console.log(m);
+					this.now_meeting.no = m.no;
+					this.now_meeting.name = m.name;
+					this.now_meeting.time = m.time;
+					this.now_meeting.address = m.address;
+					this.now_meeting.students = [];
 
+					for (let i = 0; i < m.students.length; i++) {
+						this.now_meeting.students.push(m.students[i].student.s_no);
+					}
+					console.log(this.now_meeting.students);
+				},
+				//部门跳转
+				dept_go: function (index) {
+					this.now_dept = this.list[index];
+				},
+				//全选
+				all: function () {
+					let arr = this.now_meeting.students;
+
+					for (let index = 0; index < this.now_dept.student.length; index++) {
+
+						let tagle = true;
+						for (let i = 0; i < arr.length; i++) {
+							if (arr[i] === this.now_dept.student[index].s_no) {
+								tagle = false;
+							}
+						}
+						if (tagle) {
+							arr.push(this.now_dept.student[index].s_no);
+						}
+					}
+					console.log(this.now_meeting.students);
+				},
+				//取消全选
+				noall: function () {
+					let arr = this.now_meeting.students;
+					for (let index = 0; index < this.now_dept.student.length; index++) {
+						for (let i = 0; i < arr.length; i++) {
+							if (arr[i] === this.now_dept.student[index].s_no) {
+								arr.splice(i, 1);
+							}
+						}
+					}
+				},
+				//大会全选
+				meetall: function () {
+					let dept;
+					let arr = this.now_meeting.students;
+					for (let x = 0; x < this.list.length; x++) {
+						dept = this.list[x];
+						for (let index = 0; index < dept.student.length; index++) {
+							let tagle = true;
+							for (let i = 0; i < arr.length; i++) {
+								if (arr[i] === dept.student[index].s_no) {
+									tagle = false;
+								}
+							}
+							if (tagle) {
+								arr.push(dept.student[index].s_no);
+							}
+						}
+					}
+					console.log(this.now_meeting.students);
+				},
+				//大会取消全选
+				meetnoall: function () {
+					this.now_meeting.students = [];
+				},
+
+				//-------------请求-------------//
+				//修改会议
+				meeting_update: function () {
+					console.log(this.now_meeting);
+					let stu = this.now_meeting;
+					axios.post('/api/v2/meeting/update', stu)
+						.then(
+							(res) => {
+								if (res.data) {
+									toastr.success('会议修改成功');
+									axios.get('/api/v2/data/meetinglist')
+										.then(
+											(res) => {
+												console.log(res.data);
+												this.meetingList = res.data;
+
+											}
+										)
+										.catch(
+											(error) => { console.log(error); }
+										);
+								} else {
+									toastr.warning('修改失败');
+								}
+							}
+						)
+						.catch(
+							(error) => { console.log(error); }
+						);
+				},
 			},
 
 			//挂载
@@ -142,7 +347,19 @@
 						(res) => {
 							console.log(res.data);
 							this.meetingList = res.data;
-							
+
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+				axios.get('/api/v2/data/deptlist')
+					.then(
+						(res) => {
+							console.log(res.data);
+							this.list = res.data;
+							//加载部门列表
+							this.now_dept = this.list[0];
 						}
 					)
 					.catch(
@@ -151,7 +368,9 @@
 			},
 
 			computed: {
-
+				dept_pages: function () {
+					return Math.ceil(this.list.length / 4);
+				},
 			},
 		});
 	</script>

@@ -32,7 +32,13 @@ public class Meeting {
 		
 	}
 
-	
+	public Meeting(int no, String time, String name, String address) {
+		super();
+		this.no = no;
+		this.time = time;
+		this.name = name;
+		this.address = address;
+	}
 	
 
 	public Meeting(String time, String name, String address) {

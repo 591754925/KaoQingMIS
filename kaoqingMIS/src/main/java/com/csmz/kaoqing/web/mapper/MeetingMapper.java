@@ -12,7 +12,6 @@ import org.apache.ibatis.annotations.Results;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.csmz.kaoqing.web.Dept;
 import com.csmz.kaoqing.web.Meeting;
 
 
@@ -42,7 +41,7 @@ public interface MeetingMapper {
 	
 	
 	/**
-	 * 根据部门编号查部门
+	 * 根据会议编号查会议
 	 * @param d_no
 	 * @return
 	 */
@@ -56,7 +55,7 @@ public interface MeetingMapper {
 				property = "students",
 				one=@One(select="com.csmz.kaoqing.web.mapper.MeetingStudentMapper.list")),
 	})
-	Dept loadById(@Param("m_no") int m_no);
+	Meeting loadById(@Param("m_no") int m_no);
 	
 	
 	/**

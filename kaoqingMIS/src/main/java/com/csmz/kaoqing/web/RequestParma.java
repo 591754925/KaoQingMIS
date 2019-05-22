@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 public class RequestParma {
 	
+	int no;
 	String time;
 	String name; 
 	String address;
@@ -20,9 +21,24 @@ public class RequestParma {
 		this.students = students;
 	}
 
+	public RequestParma(int no, String time, String name, String address, String[] students) {
+		super();
+		this.no = no;
+		this.time = time;
+		this.name = name;
+		this.address = address;
+		this.students = students;
+	}
 	
 	
-	
+	public int getNo() {
+		return no;
+	}
+
+	public void setNo(int no) {
+		this.no = no;
+	}
+
 	public String getTime() {
 		return time;
 	}
@@ -57,9 +73,10 @@ public class RequestParma {
 
 	@Override
 	public String toString() {
-		return "RequestParma [time=" + time + ", name=" + name + ", address=" + address + ", students="
+		return "RequestParma [no=" + no + ", time=" + time + ", name=" + name + ", address=" + address + ", students="
 				+ Arrays.toString(students) + "]";
 	}
+
 	
 	
 	
