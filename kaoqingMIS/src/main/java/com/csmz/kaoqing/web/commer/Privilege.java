@@ -25,6 +25,7 @@ public class Privilege {
 		{
 			return true;
 		}
+		
 		return false;
 	}
 

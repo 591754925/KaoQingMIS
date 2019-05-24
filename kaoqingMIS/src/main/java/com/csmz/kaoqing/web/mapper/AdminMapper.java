@@ -35,6 +35,8 @@ public interface AdminMapper {
 	@Select("select * from admins where userid = #{userid}")
 	Admin loadByUserId(@Param("userid") String userid);
 	
+	
+	
 	/**
 	 * 根据id获取
 	 * @param id

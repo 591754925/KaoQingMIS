@@ -14,6 +14,9 @@
     <!-- JS库 ajax 异步通信-->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
+    <!-- jQuery库 -->
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+
     <!-- vue.js -->
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
@@ -56,24 +59,26 @@
                 <div class="col-lg-4 pl-5">
                     <div class="row">
                         <div class="form-group">
-                            <input type="text" class="form-control" aria-describedby="helpId" placeholder="账号">
+                            <input type="text" v-model="userid" class="form-control" aria-describedby="helpId"
+                                placeholder="账号">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group">
-                            <input type="text" style="width:105px;" class="form-control" aria-describedby="helpId"
-                                placeholder="验证码">
+                            <input type="text" v-model="text" style="width:105px;" class="form-control"
+                                aria-describedby="helpId" placeholder="验证码">
                         </div>
-                        <input v-if="true" name="" id="" style="height:38px; font-size: 15px;"
+                        <input v-show="tagle" name="" id="" @click="send()" style="height:38px; font-size: 15px;"
                             class="btn btn-primary ml-2 px-1" type="button" value="获取验证码">
-                        <input v-if="false" name="" id="" style="height:38px; width:85px; font-size: 18px;"
-                            class="btn btn-outline-primary ml-2 px-1" type="button" value="59S" disabled>
+                        <input v-show="!tagle" v-model="time" name="" id=""
+                            style="height:38px; width:85px; font-size: 18px; background-color:silver;"
+                            class="btn btn-outline-primary ml-2 px-1" type="button" disabled>
 
                     </div>
                     <div class="row">
-                        <input style="height:38px; font-size: 15px; width: 150px;" class="btn btn-primary px-1"
-                            type="button" value="登录">
+                        <input @click="login()" style="height:38px; font-size: 15px; width: 150px;"
+                            class="btn btn-primary px-1" type="button" value="登录">
                     </div>
                 </div>
                 <div class="col-lg-3">
@@ -91,18 +96,17 @@
         </p>
     </footer>
     <!-- 加载vue实例和组件 -->
+    <script type="text/javascript" src="js/toastr.min.js"></script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
         integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+
     <script>
         new Vue({
             el: '#app',
@@ -114,6 +118,69 @@
                     username: 'member'   //用户身份
                 },
                 date: '2019-02-12 15:30:00',
+                text: '000000',
+                userid: 'member',
+                tagle: true,
+                time: 59,
+
+            },
+            methods: {
+                //倒计时
+                countTime: function () {
+
+
+                    var setTime = setInterval(() => {
+                        this.time--;
+                        if (this.time > 0) {
+                            this.tagle = false;
+                        } else {
+                            clearInterval(setTime);
+                            this.tagle = true;
+                        }
+                    }, 1000);
+
+
+                },
+                send: function () {
+                    let s = new URLSearchParams();
+                    s.append('userid', this.userid);
+                    this.tagle = false;
+                    this.time = 59;
+                    this.countTime();
+                    axios.post('/send', s)
+                    	.then(
+                    		(res) => {
+                    			if (res.data) {
+                                    toastr.success('验证码发送成功');
+
+                    			} else {
+                    				toastr.warning('验证码发送失败');
+                    			}
+                    		}
+                    	)
+                    	.catch(
+                    		(error) => { console.log(error); }
+                    	);
+                },
+                login: function () {
+                    let s = new URLSearchParams();
+                    s.append('userid', this.userid);
+                    s.append('text', this.text);
+                    axios.post('/login', s)
+                        .then(
+                            (res) => {
+                                if (res.data) {
+                                    toastr.success('登录成功');
+
+                                } else {
+                                    toastr.warning('登录失败');
+                                }
+                            }
+                        )
+                        .catch(
+                            (error) => { console.log(error); }
+                        );
+                }
 
             },
             //计算属性
