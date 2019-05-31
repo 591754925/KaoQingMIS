@@ -1110,7 +1110,7 @@ new Vue({
         //删除学生
         student_remove: function (s_no) {
             console.log(s_no);
-            axios.get('/api/v2/student/remove?s_no='+s_no)
+            axios.get('/api/v2/student/remove?s_no=' + s_no)
                 .then(
                     (res) => {
                         if (res.data) {
@@ -1394,7 +1394,7 @@ new Vue({
         },
         //-----------------------------文件操作----------------------------------//
         //文件写入
-        file_write: function(name) {
+        file_write: function (name) {
             axios.post('/api/v2/file/write', name)
                 .then(
                     (res) => {
@@ -1410,7 +1410,7 @@ new Vue({
         },
 
         //excel表格生成
-        file_excel: function() {
+        file_excel: function () {
             axios.get('/api/v2/file/excel')
                 .then(
                     (res) => {
@@ -1420,7 +1420,7 @@ new Vue({
                                 .then(
                                     (res) => {
                                         console.log(res.data);
-                                        this.excel = res.data; 
+                                        this.excel = res.data;
                                     }
                                 )
                                 .catch(
@@ -1436,13 +1436,13 @@ new Vue({
         },
 
         //文件下载
-        file_dowlond: function(name) {
+        file_dowlond: function (name) {
             console.log(name);
             axios.post('/api/v2/file/dowlond', name)
                 .then(
                     (res) => {
                         if (res.data) {
-                            
+
                         } else
                             toastr.warning('下载失败');
                     }
@@ -1453,7 +1453,7 @@ new Vue({
         },
 
         //文件删除
-        file_remove: function(name) {
+        file_remove: function (name) {
             axios.post('/api/v2/file/remove', name)
                 .then(
                     (res) => {
@@ -1463,7 +1463,7 @@ new Vue({
                                 .then(
                                     (res) => {
                                         console.log(res.data);
-                                        this.excel = res.data; 
+                                        this.excel = res.data;
                                     }
                                 )
                                 .catch(
@@ -1480,6 +1480,20 @@ new Vue({
     },
     //挂载
     mounted() {
+        axios.get('/tagle')
+            .then(
+                (res) => {
+                    if (res.data.userid != null) {
+                        console.log(res.data);
+                        this.user= res.data;
+                    } else {
+                        window.location.href = 'login.html';
+                    }
+                }
+            )
+            .catch(
+                (error) => { console.log(error); }
+            );
         axios.get('/api/v2/data/deptlist')
             .then(
                 (res) => {

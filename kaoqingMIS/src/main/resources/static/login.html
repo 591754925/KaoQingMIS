@@ -154,7 +154,7 @@
                                     toastr.success('验证码发送成功');
 
                     			} else {
-                    				toastr.warning('验证码发送失败');
+                                    toastr.warning('验证码发送失败');
                     			}
                     		}
                     	)
@@ -171,6 +171,7 @@
                             (res) => {
                                 if (res.data) {
                                     toastr.success('登录成功');
+                                    window.location.href=res.data;
 
                                 } else {
                                     toastr.warning('登录失败');
@@ -186,7 +187,27 @@
             //计算属性
             computed: {
 
+            },
+            mounted() {
+                axios.get('/tagle')
+					.then(
+						(res) => {
+							if (res.data.userid != null) {
+                                console.log(res.data);
+                                if(res.data.id == 1){
+                                    window.location.href = 'index_admin.html';
+                                }else {
+                                    window.location.href = 'index.html';
+                                }
+								
+							} 
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
             }
+
 
         });
     </script>

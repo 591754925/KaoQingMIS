@@ -44,74 +44,74 @@
 				<!-- 添加圆点导航 -->
 				<div class="swiper-pagination"></div>
 			</div>
-			
+
 			<!--中间分类导航-->
 			<div class="weui-grids" style="background: #FFFFFF;">
-					<a href="i_meeting.html" class="weui-grid js_grid">
-						<div class="weui-grid__icon">
-							<img src="images/icon_nav_sz.png" alt="">
-						</div>
-						<p class="weui-grid__label">会议管理</p>
-					</a> <a href="i_kaoqing.html" class="weui-grid js_grid">
-						<div class="weui-grid__icon">
-							<img src="images/icon_nav_kc.png" alt="">
-						</div>
-						<p class="weui-grid__label">学生考勤</p>
-					</a> <a href="i_dept.html" class="weui-grid js_grid">
-						<div class="weui-grid__icon">
-							<img src="images/user.jpg" alt="">
-						</div>
-						<p class="weui-grid__label">成员管理</p>
-					</a> <a href="i_score.html" class="weui-grid js_grid">
-						<div class="weui-grid__icon">
-							<img src="images/icon_nav_hd.png" alt="">
-						</div>
-						<p class="weui-grid__label">分数审核</p>
+				<a href="i_meeting.html" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="images/icon_nav_sz.png" alt="">
+					</div>
+					<p class="weui-grid__label">会议管理</p>
+				</a> <a href="i_kaoqing.html" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="images/icon_nav_kc.png" alt="">
+					</div>
+					<p class="weui-grid__label">学生考勤</p>
+				</a> <a href="i_dept.html" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="images/user.jpg" alt="">
+					</div>
+					<p class="weui-grid__label">成员管理</p>
+				</a> <a href="i_score.html" class="weui-grid js_grid">
+					<div class="weui-grid__icon">
+						<img src="images/icon_nav_hd.png" alt="">
+					</div>
+					<p class="weui-grid__label">分数审核</p>
+				</a>
+			</div>
+			<!--公告-->
+			<div class="weui-panel weui-panel_access ">
+				<div class="weui-panel__ft">
+					<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+						<div class="weui-cell__bd h-tittle">公告</div> <span class="weui-cell__ft"></span>
 					</a>
 				</div>
-				<!--公告-->
-				<div class="weui-panel weui-panel_access ">
-					<div class="weui-panel__ft">
-						<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
-							<div class="weui-cell__bd h-tittle">公告</div> <span class="weui-cell__ft"></span>
-						</a>
-					</div>
-					<div class="weui-panel__bd">
-						<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
-							<div class="weui-media__bd">
-								<p class="weui-media__desc">欢迎0{{user.id}}号负责人 {{user.username}} 使用学生考勤管理系统</p>
-								<p class="weui-media__desc">登入时间：{{date}}</p>
-							</div>
-						</a>
-					</div>
+				<div class="weui-panel__bd">
+					<a href="javascript:void(0);" class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media__bd">
+							<p class="weui-media__desc">欢迎0{{user.id}}号负责人 {{user.username}} 使用学生考勤管理系统</p>
+							<p class="weui-media__desc">登入时间：{{date}}</p>
+						</div>
+					</a>
 				</div>
-				<div class="weui-panel weui-panel_access" style="margin-bottom: 50px;">
-					<div class="weui-panel__ft">
-						<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
-							<div class="weui-cell__bd h-tittle">操作须知</div> <span class="weui-cell__ft"></span>
-						</a>
-					</div>
-					<div class="weui-panel__bd">
-						<a href="javascript:;" class="weui-media-box weui-media-box_appmsg">
-							<div class="weui-media__bd">
-								<h4 class="weui-media__title">工作时间</h4>
-								<p class="weui-media__desc">时间：</p>
-							</div>
-						</a>
-					</div>
-					<div class="weui-panel__bd" style="margin-top: 15px;">
-						<a href="#" class="weui-media-box weui-media-box_appmsg">
-							<div class="weui-media__bd">
-								<h4 class="weui-media__title">联系我们</h4>
-								<p class="weui-media__desc">电话：</p>
-							</div>
-						</a>
-					</div>
+			</div>
+			<div class="weui-panel weui-panel_access" style="margin-bottom: 50px;">
+				<div class="weui-panel__ft">
+					<a href="javascript:void(0);" class="weui-cell weui-cell_access weui-cell_link">
+						<div class="weui-cell__bd h-tittle">操作须知</div> <span class="weui-cell__ft"></span>
+					</a>
 				</div>
+				<div class="weui-panel__bd">
+					<a href="javascript:;" class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media__bd">
+							<h4 class="weui-media__title">工作时间</h4>
+							<p class="weui-media__desc">时间：</p>
+						</div>
+					</a>
+				</div>
+				<div class="weui-panel__bd" style="margin-top: 15px;">
+					<a @click="outLogin()" class="weui-media-box weui-media-box_appmsg">
+						<div class="weui-media__bd">
+							<h4 class="weui-media__title">注销登录</h4>
+							
+						</div>
+					</a>
+				</div>
+			</div>
 		</div>
 
 		<!--底部导航-->
-		<n-nav-footer :page="now_page[0]" ></n-nav-footer>
+		<n-nav-footer :page="now_page[0]"></n-nav-footer>
 
 	</div>
 
@@ -130,23 +130,56 @@
 					'home',
 					'students',
 					'kaoqing'
-				], 
+				],
 				user: {             //用户信息
-					id: '2',         //用户编号
-					userid: 'member',     //用户账号
-					username: 'member'   //用户身份
+					id: '',         //用户编号
+					userid: '',     //用户账号
+					username: ''   //用户身份
 				},
-				date:'2019-02-12 15:30:00',
+				date: '2019-02-12 15:30:00',
 
+			},
+			methods: {
+				outLogin: function() {
+					axios.get('/outlogin')
+					.then(
+						(res) => {
+							if (res.data) {
+								window.location.href = 'login.html';
+							} else {
+								
+							}
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
+				}
 			},
 			//计算属性
 			computed: {
-				
+
+			},
+			mounted() {
+				axios.get('/tagle')
+					.then(
+						(res) => {
+							if (res.data.userid != null) {
+								console.log(res.data);
+								this.user= res.data;
+							} else {
+								window.location.href = 'login.html';
+							}
+						}
+					)
+					.catch(
+						(error) => { console.log(error); }
+					);
 			}
-			
+
 		});
 	</script>
-		
+
 	<script>
 		var swiper = new Swiper('.swiper-container', {
 			pagination: '.swiper-pagination',
@@ -154,7 +187,7 @@
 			autoplay: 2500
 		});
 	</script>
-	
+
 </body>
 
 </html>
